@@ -1,11 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Header = (props) => {
-  return (
-      <h1>{props.name}</h1>
-  )
-}
+const Header = ({name}) => <h1>{name}</h1>
 
 const Content = (props) => {
   return (

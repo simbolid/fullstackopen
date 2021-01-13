@@ -8,9 +8,8 @@ const App = () => {
 
   // get country data from restcountries.eu
   useEffect(() => {
-    axios
-      .get('https://restcountries.eu/rest/v2/all')
-      .then(response => setCountries(response.data))
+    axios.get('https://restcountries.eu/rest/v2/all')
+    .then(response => setCountries(response.data))
   }, [])
 
   const handleFilterChange = (event) => setFilter(event.target.value)

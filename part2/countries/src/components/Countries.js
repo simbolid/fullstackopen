@@ -1,5 +1,7 @@
-import React from 'react';
+import React from 'react'
+import CountryListing from './CountryListing'
 import Country from './Country'
+import Weather from './Weather'
 
 const Countries = (props) => {
   const countries = props.countries
@@ -8,10 +10,15 @@ const Countries = (props) => {
 
   if (matches.length > 10) 
     return <div>Too many matches, specify another filter</div>
-  else if (matches.length === 1)
-    return <Country country={matches[0]} />
+  else if (matches.length === 1) 
+    return (
+      <>
+        <Country country={matches[0]} />
+        <Weather country={matches[0]} />
+      </>
+    ) 
   else 
-    return matches.map(country => <div key={country.alpha3Code}>{country.name}</div>)
+    return matches.map(country => <CountryListing key={country.alpha3Code} country={country} />)
 }
 
 export default Countries

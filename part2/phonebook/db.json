@@ -21,34 +21,19 @@
       "id": 4
     },
     {
-      "name": "Master Chief",
-      "number": "117",
-      "id": 5
-    },
-    {
-      "name": "Mando",
-      "number": "335-36",
-      "id": 6
-    },
-    {
-      "name": "Fives",
-      "number": "5555",
-      "id": 7
-    },
-    {
       "name": "Pierre Emerick",
       "number": "77-88",
       "id": 8
     },
     {
-      "name": "Darnell Simmons",
-      "number": "443-786-3211",
-      "id": 9
-    },
-    {
       "name": "Spongebob Squarepants",
       "number": "887-553-2091",
       "id": 10
+    },
+    {
+      "name": "Darnell Simmons",
+      "number": "223",
+      "id": 11
     }
   ]
 }

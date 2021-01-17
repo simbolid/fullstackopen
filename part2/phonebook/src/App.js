@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import contactService from './services/contactService'
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [ message, setMessage ] = useState(null)
+  const [ isError, setIsError ] = useState(false)
 
   // get initial phonebook contacts from db.json 
   useEffect(() => {
@@ -33,9 +36,11 @@ const App = () => {
     const name = event.target.value
 
     if (window.confirm(`Remove ${name}?`)) {
-      const toDelete = contacts.filter(contact => contact.name === name)[0]
+      const toDelete = contacts.find(contact => contact.name === name)
       const newContacts = contacts.filter(contact => contact.name !== name)
-      contactService._delete(toDelete).then(() => setContacts(newContacts)) 
+
+      contactService._delete(toDelete).then(() => setContacts(newContacts))
+      .catch(() => setContacts(newContacts)) 
     } 
   }
 
@@ -50,18 +55,30 @@ const App = () => {
       alert('Fill in both fields before submitting')
     }
     else if (contacts.some(contact => contact.name === newName)) {
-      const person = contacts.filter(contact => contact.name === newName)[0]
+      const person = contacts.find(contact => contact.name === newName)
+
       if (person.number === newNumber) {
         alert(`${newName} already has that number`)
       } 
       else {
-        if (window.confirm(`Update ${person.name}'s number?`)) {
-          // update number 
+        if (window.confirm(`Update ${person.name}'s number?`)) { 
           contactService
             .update(person.id, newContact).then(returnedContact => {
               setContacts(contacts.map(contact => contact.id === person.id ? returnedContact : contact))
+              setIsError(false)
+              setMessage(`Changed ${returnedContact.name}'s number to ${returnedContact.number}`)
+              setTimeout(() => setMessage(null), 5000)
               setNewName('')
               setNewNumber('')
+            })
+            .catch(() => {
+              setIsError(true)
+              setMessage(`The server does not contain ${person.name}'s data`)
+              setTimeout(() => {
+                setIsError(false)
+                setMessage(null)      
+              }, 5000)
+              setContacts(contacts.filter(contact => contact.id !== person.id))
             })
         }
       }
@@ -71,6 +88,9 @@ const App = () => {
         .create(newContact)
         .then(contact => {
           setContacts(contacts.concat(contact))
+          setIsError(false)
+          setMessage(`Added ${contact.name}`)
+          setTimeout(() => setMessage(null), 5000)
           setNewName('')
           setNewNumber('')
         })
@@ -80,6 +100,7 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification message={message} isError={isError}/>
       <h3>Add Contact</h3>
       <Form handleSubmit={handleSubmit} newName={newName} newNumber={newNumber} 
             handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>

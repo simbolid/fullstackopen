@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
+import contactService from './services/contactService'
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [ contacts, setContacts ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
 
   // get initial phonebook contacts from db.json 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled, retrieved', response.data)
-        setPersons(response.data)
-      })
+    contactService
+      .getAll()
+      .then(contacts => setContacts(contacts))
   }, [])
-  console.log('render', persons.length, 'contacts')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -34,17 +29,51 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const handleDelete = (event) => {
+    const name = event.target.value
+
+    if (window.confirm(`Remove ${name}?`)) {
+      const toDelete = contacts.filter(contact => contact.name === name)[0]
+      const newContacts = contacts.filter(contact => contact.name !== name)
+      contactService._delete(toDelete).then(() => setContacts(newContacts)) 
+    } 
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} has already been added to the phonebook`)
+    const newContact = {
+      name: newName, 
+      number: newNumber
+    }
+
+    if (newName === '' || newNumber === '') {
+      alert('Fill in both fields before submitting')
+    }
+    else if (contacts.some(contact => contact.name === newName)) {
+      const person = contacts.filter(contact => contact.name === newName)[0]
+      if (person.number === newNumber) {
+        alert(`${newName} already has that number`)
+      } 
+      else {
+        if (window.confirm(`Update ${person.name}'s number?`)) {
+          // update number 
+          contactService
+            .update(person.id, newContact).then(returnedContact => {
+              setContacts(contacts.map(contact => contact.id === person.id ? returnedContact : contact))
+              setNewName('')
+              setNewNumber('')
+            })
+        }
+      }
     } 
     else {
-      const newPerson = {
-        name: newName, 
-        number: newNumber
-      }
-      setPersons(persons.concat(newPerson))
+      contactService
+        .create(newContact)
+        .then(contact => {
+          setContacts(contacts.concat(contact))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
@@ -54,8 +83,8 @@ const App = () => {
       <h3>Add Contact</h3>
       <Form handleSubmit={handleSubmit} newName={newName} newNumber={newNumber} 
             handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
-      <h3>Numbers</h3>
-      <Persons persons={persons} filter={filter} />
+      <h3>Contacts</h3>
+      <Persons persons={contacts} filter={filter} handleDelete={handleDelete} />
       <h3>Filter</h3>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
     </>

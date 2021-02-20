@@ -26,10 +26,30 @@ let persons = [
   }
 ]
 
+// retrieve all entries
 app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
+// retrieve single entry
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id) // request ID is a string, server stores ID as int 
+
+  console.log(id)
+
+  const person = persons.find(person => person.id === id)
+
+  console.log(person)
+
+  if (person) 
+    response.json(person)
+  else 
+    response.status(404).end() // 404 not found
+
+  // console.log(note)
+})
+
+// retrieve phonebook info: number of people, datetime
 app.get('/info', (request, response) => {
   response.send(`<p>Phonebook has info for ${persons.length} people</p> ${new Date()}`)
 })

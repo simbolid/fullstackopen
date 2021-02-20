@@ -35,7 +35,7 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id) // request ID is a string, server stores ID as int 
 
-  console.log(id)
+  console.log(`GET request for ID ${id}`)
 
   const person = persons.find(person => person.id === id)
 
@@ -45,9 +45,17 @@ app.get('/api/persons/:id', (request, response) => {
     response.json(person)
   else 
     response.status(404).end() // 404 not found
-
-  // console.log(note)
 })
+
+// delete an entry
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id) 
+  console.log(`DELETE request for ID ${id}`)
+
+  persons = persons.filter(person => person.id !== id)
+
+  response.status(204).end() // 204 no content
+}) 
 
 // retrieve phonebook info: number of people, datetime
 app.get('/info', (request, response) => {

@@ -1,7 +1,9 @@
 const express = require('express')
-const app = express()
+const morgan = require('morgan') // logging middleware
 
+const app = express()
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
   { 
@@ -36,7 +38,6 @@ app.get('/api/persons', (request, response) => {
 // retrieve single entry
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id) // request ID is a string, server stores ID as int 
-  console.log(`GET request for ID ${id}`)
   const person = persons.find(person => person.id === id)
   console.log(person)
   if (person) 

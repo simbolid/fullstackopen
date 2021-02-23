@@ -3,7 +3,9 @@ const morgan = require('morgan') // logging middleware
 
 const app = express()
 app.use(express.json())
-app.use(morgan('tiny'))
+
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
   { 
@@ -39,7 +41,6 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id) // request ID is a string, server stores ID as int 
   const person = persons.find(person => person.id === id)
-  console.log(person)
   if (person) 
     response.json(person)
   else 
@@ -49,7 +50,6 @@ app.get('/api/persons/:id', (request, response) => {
 // delete an entry
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id) 
-  console.log(`DELETE request for ID ${id}`)
   persons = persons.filter(person => person.id !== id)
   response.status(204).end() // 204 no content
 }) 
@@ -78,7 +78,6 @@ app.post('/api/persons', (request, response) => {
     name: body.name, 
     number: body.number
   }
-  console.log(person)
   persons = persons.concat(person)
   response.json(person)
 })

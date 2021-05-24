@@ -1,0 +1,44 @@
+{
+  "contacts": [
+    {
+      "name": "Arto Hellas",
+      "number": "040-123456",
+      "id": 1
+    },
+    {
+      "name": "Ada Lovelace",
+      "number": "39-44-5323523",
+      "id": 2
+    },
+    {
+      "name": "Dan Abramov",
+      "number": "12-43-234345",
+      "id": 3
+    },
+    {
+      "name": "Master Chief",
+      "number": "117",
+      "id": 5
+    },
+    {
+      "name": "Mando",
+      "number": "335-35",
+      "id": 6
+    },
+    {
+      "name": "Fives",
+      "number": "5555",
+      "id": 7
+    },
+    {
+      "name": "Pierre Emerick",
+      "number": "77-88",
+      "id": 8
+    },
+    {
+      "name": "Arbiter",
+      "number": "8818",
+      "id": 9
+    }
+  ]
+}

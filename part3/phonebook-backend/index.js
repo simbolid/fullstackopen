@@ -4,6 +4,11 @@ const morgan = require('morgan') // logging middleware
 const app = express()
 app.use(express.json())
 
+// upon receiving GET request, check if build directory contains a file
+// corresponding to request address
+app.use(express.static('build'))  
+
+// HTTP request logging 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 

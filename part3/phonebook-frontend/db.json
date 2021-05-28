@@ -11,11 +11,6 @@
       "id": 2
     },
     {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
       "name": "Master Chief",
       "number": "117",
       "id": 5
@@ -39,6 +34,11 @@
       "name": "Arbiter",
       "number": "8818",
       "id": 9
+    },
+    {
+      "name": "test",
+      "number": "123",
+      "id": 10
     }
   ]
 }

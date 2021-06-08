@@ -34,19 +34,20 @@ app.get('/api/persons/:id', (request, response) => {
     })
 })
 
-// delete an entry
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id) 
-  persons = persons.filter(person => person.id !== id)
-  response.status(204).end() // 204 no content
-}) 
-
 // retrieve phonebook info: number of people, datetime
 app.get('/info', (request, response) => {
   Person.count({}, (err, count) => {
     response.send(`<p>Phonebook has info for ${count} people</p> ${new Date()}`)
   })
 })
+
+/*
+// delete an entry
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id) 
+  persons = persons.filter(person => person.id !== id)
+  response.status(204).end() // 204 no content
+}) */ 
 
 // add an entry
 app.post('/api/persons', (request, response) => {
@@ -57,18 +58,18 @@ app.post('/api/persons', (request, response) => {
       error: 'data must include both name and number'
     })
   
+  /*
   if (persons.some(person => person.name === body.name))
     return response.status(400).json({
       error: 'name must be unique'
-    })
+    }) */
   
-  const person = {
-    id: generateId(), 
+  const person = new Person({
     name: body.name, 
     number: body.number
-  }
-  persons = persons.concat(person)
-  response.json(person)
+  })
+
+  person.save().then(savedPerson => response.json(savedPerson))
 })
 
 

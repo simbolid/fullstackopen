@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "name": "Reiner", 
-  "number": 8888
+  "number": 8889
 }
 
 ###
@@ -11,8 +11,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-  "name": "Eren", 
-  "number": 6666
+  "name": "Gojo", 
+  "number": 33300 
 }
 
 ###

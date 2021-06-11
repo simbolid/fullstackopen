@@ -41,13 +41,15 @@ app.get('/info', (request, response) => {
   })
 })
 
-/*
 // delete an entry
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id) 
-  persons = persons.filter(person => person.id !== id)
-  response.status(204).end() // 204 no content
-}) */ 
+  Person.findByIdAndRemove(request.params.id)
+    .then(person => {
+      person ? response.json(person) 
+             : response.status(404).end()
+    })
+    // .catch(error => next(error))
+})  
 
 // add an entry
 app.post('/api/persons', (request, response) => {

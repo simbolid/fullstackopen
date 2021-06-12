@@ -80,8 +80,6 @@ app.put('/api/persons/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-/* End route handlers */
-
 // see https://mongoosejs.com/docs/api/error.html for mongoose error types
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);

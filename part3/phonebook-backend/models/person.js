@@ -1,11 +1,11 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const url = process.env.DB_URI;
 
 // connect to MongoDB
 console.log('connecting to', url);
-
 mongoose.connect(url,
   {
     useNewUrlParser: true,
@@ -22,9 +22,19 @@ mongoose.connect(url,
 
 // define phonebook entry data
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  number: {
+    type: String,
+    required: true,
+  },
 });
+
+// apply the uniqueValidator plugin to the schema
+personSchema.plugin(uniqueValidator);
 
 // make ID field a string rather than an object; remove unncessary fields
 personSchema.set('toJSON', {

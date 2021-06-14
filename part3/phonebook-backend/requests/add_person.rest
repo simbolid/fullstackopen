@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "name": "Reiner", 
-  "number": 8889
+  "number": 8888
 }
 
 ###
@@ -13,6 +13,15 @@ Content-Type: application/json
 {
   "name": "Gojo", 
   "number": 33300 
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Tobi", 
+  "number": 4514 
 }
 
 ###

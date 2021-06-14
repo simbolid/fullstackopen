@@ -13,7 +13,7 @@ const App = () => {
   const [ message, setMessage ] = useState(null)
   const [ isError, setIsError ] = useState(false)
 
-  // get initial phonebook contacts from db.json 
+  // get initial phonebook contacts 
   useEffect(() => {
     contactService
       .getAll()
@@ -62,6 +62,7 @@ const App = () => {
       } 
       else {
         if (window.confirm(`Update ${person.name}'s number?`)) { 
+          // display confirmation message through the Notification component
           contactService
             .update(person.id, newContact).then(returnedContact => {
               setContacts(contacts.map(contact => contact.id === person.id ? returnedContact : contact))
@@ -71,14 +72,20 @@ const App = () => {
               setNewName('')
               setNewNumber('')
             })
-            .catch(() => {
+            // display error message
+            .catch((error) => {
+              console.log(error.response)
               setIsError(true)
-              setMessage(`The server does not contain ${person.name}'s data`)
+              if (error.response.status === 400) { // 400 bad request
+                setMessage(error.response.data.error)
+              } else {
+                setMessage(`The server does not contain ${person.name}'s data`)
+                setContacts(contacts.filter(contact => contact.id !== person.id))
+              }
               setTimeout(() => {
                 setIsError(false)
                 setMessage(null)      
               }, 5000)
-              setContacts(contacts.filter(contact => contact.id !== person.id))
             })
         }
       }
@@ -93,6 +100,14 @@ const App = () => {
           setTimeout(() => setMessage(null), 5000)
           setNewName('')
           setNewNumber('')
+        })
+        .catch((error) => {
+          setIsError(true)
+          setMessage(error.response.data.error)
+          setTimeout(() => {
+            setIsError(false)
+            setMessage(null)      
+          }, 5000)
         })
     }
   }

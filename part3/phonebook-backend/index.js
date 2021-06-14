@@ -74,8 +74,14 @@ app.post('/api/persons', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const update = { number: request.body.number };
 
-  // new option: return updated note
-  Person.findByIdAndUpdate(request.params.id, update, { new: true })
+  // return the updated note; run phone number validation (but not the uniqueness validator)
+  const options = {
+    new: true,
+    runValidators: true,
+    context: 'query',
+  };
+
+  Person.findByIdAndUpdate(request.params.id, update, options)
     .then((savedPerson) => response.json(savedPerson))
     .catch((error) => next(error));
 });

@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Finishing this Fight",
+  "author": "Master Chief",
+  "url": "halowaypoint.com",
+  "likes": "117"
+}

@@ -17,3 +17,20 @@ describe('total likes', () => {
     expect(result).toBe(36);
   });
 });
+
+describe('favorite blog', () => {
+  test('of empty list is empty object', () => {
+    const result = listHelper.favoriteBlog([]);
+    expect(result).toEqual({});
+  });
+
+  test('when list has only one blog, equals that blog', () => {
+    const result = listHelper.favoriteBlog([blogs[0]]);
+    expect(result).toEqual(blogs[0]);
+  });
+
+  test('of bigger list is blog with most likes', () => {
+    const result = listHelper.favoriteBlog(blogs);
+    expect(result).toEqual(blogs[2]);
+  });
+});

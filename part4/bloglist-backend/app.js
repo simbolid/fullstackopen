@@ -16,7 +16,7 @@ mongoose.connect(config.MONGODB_URI,
     useFindAndModify: false,
     useCreateIndex: true,
   })
-  .then(() => logger.error('connected to MongoDB'))
+  .then(() => logger.info('connected to MongoDB'))
   .catch((error) => logger.error('error connecting to MongoDB:', error.message));
 
 // allow requests from any origin

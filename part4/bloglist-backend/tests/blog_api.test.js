@@ -21,88 +21,92 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
-test('server returns correct number of blogs in JSON format', async () => {
-  const response = await api.get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/);
+describe('when there are blogs in the database', () => {
+  test('the server returns the correct number of blogs in JSON format', async () => {
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
 
-  expect(response.body).toHaveLength(initialBlogs.length);
+    expect(response.body).toHaveLength(initialBlogs.length);
+  });
+
+  test('the unique identifier property of blog posts is named "id"', async () => {
+    const response = await api.get('/api/blogs');
+
+    expect(response.body[0].id).toBeDefined();
+  });
 });
 
-test('the unique identifier property of blog posts is named "id"', async () => {
-  const response = await api.get('/api/blogs');
+describe('adding a blog', () => {
+  test('succeeds with valid data', async () => {
+    const newBlog = {
+      title: 'Example Blog',
+      author: 'Mary Sue',
+      url: 'example.com',
+      likes: 10,
+    };
 
-  expect(response.body[0].id).toBeDefined();
-});
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
 
-test('server creates a valid note', async () => {
-  const newBlog = {
-    title: 'Example Blog',
-    author: 'Mary Sue',
-    url: 'example.com',
-    likes: 10,
-  };
+    // check that database has stored an additional document
+    const blogsAtEnd = await notesInDb();
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1);
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/);
+    // check that database has stored the correct document
+    const titles = blogsAtEnd.map((blog) => blog.title);
+    expect(titles).toContain('Example Blog');
+  });
 
-  // check that database has stored an additional document
-  const blogsAtEnd = await notesInDb();
-  expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1);
+  test('without the "likes" property succeeds, with "likes" set to zero', async () => {
+    const newBlog = {
+      title: 'Example Blog',
+      author: 'Mary Sue',
+      url: 'example.com',
+    };
 
-  // check that database has stored the correct document
-  const titles = blogsAtEnd.map((blog) => blog.title);
-  expect(titles).toContain('Example Blog');
-});
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
 
-test('if "likes" property is missing from request, server sets likes to zero', async () => {
-  const newBlog = {
-    title: 'Example Blog',
-    author: 'Mary Sue',
-    url: 'example.com',
-  };
+    const blogsAtEnd = await notesInDb();
+    const { likes } = blogsAtEnd[blogsAtEnd.length - 1];
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/);
+    expect(likes).toBe(0);
+  });
 
-  const blogsAtEnd = await notesInDb();
-  const { likes } = blogsAtEnd[blogsAtEnd.length - 1];
+  test('fails with status code 400 if "title" or "url" properties are missing', async () => {
+    const missingTitle = {
+      author: 'Mary Sue',
+      url: 'example.com',
+      likes: 10,
+    };
 
-  expect(likes).toBe(0);
-});
+    const missingUrl = {
+      title: 'Example Blog',
+      author: 'Mary Sue',
+      likes: 10,
+    };
 
-test('if title or url properties are missing, server returns 400 bad request', async () => {
-  const missingTitle = {
-    author: 'Mary Sue',
-    url: 'example.com',
-    likes: 10,
-  };
+    await api
+      .post('/api/blogs')
+      .send(missingTitle)
+      .expect(400);
 
-  const missingUrl = {
-    title: 'Example Blog',
-    author: 'Mary Sue',
-    likes: 10,
-  };
+    await api
+      .post('/api/blogs')
+      .send(missingUrl)
+      .expect(400);
 
-  await api
-    .post('/api/blogs')
-    .send(missingTitle)
-    .expect(400);
-
-  await api
-    .post('/api/blogs')
-    .send(missingUrl)
-    .expect(400);
-
-  // make sure no notes have been added to database
-  const blogsAtEnd = await notesInDb();
-  expect(blogsAtEnd).toHaveLength(initialBlogs.length);
+    // make sure no notes have been added to database
+    const blogsAtEnd = await notesInDb();
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length);
+  });
 });
 
 afterAll(() => {

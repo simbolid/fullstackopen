@@ -30,4 +30,15 @@ blogRouter.delete('/:id', async (request, response) => {
   response.status(204).end();
 });
 
+// update a blog's like count
+blogRouter.put('/:id', async (request, response) => {
+  const update = { likes: request.body.likes };
+
+  // the "new" option makes the operation return the updated note, making testing easier
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, update,
+    { new: true });
+
+  response.json(updatedBlog);
+});
+
 module.exports = blogRouter;

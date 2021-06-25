@@ -7,3 +7,14 @@ Content-Type: application/json
   "url": "fullstackopen.com",
   "likes": "1100"
 }
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "React patterns",
+  "author": "Michael Chan",
+  "url": "https://reactpatterns.com/",
+  "likes": 7
+}

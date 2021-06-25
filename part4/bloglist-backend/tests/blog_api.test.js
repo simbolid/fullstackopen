@@ -6,6 +6,11 @@ const initialBlogs = require('./example_bloglist');
 
 const api = supertest(app);
 
+const notesInDb = async () => {
+  const blogsAtEnd = await Blog.find({});
+  return blogsAtEnd.map((blog) => blog.toJSON());
+};
+
 // clear and initialize test database before each test
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -45,13 +50,31 @@ test('server creates a valid note', async () => {
     .expect('Content-Type', /application\/json/);
 
   // check that database has stored an additional document
-  let blogsAtEnd = await Blog.find({});
-  blogsAtEnd = blogsAtEnd.map((blog) => blog.toJSON());
+  const blogsAtEnd = await notesInDb();
   expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1);
 
-  // check that database has stored the given document
+  // check that database has stored the correct document
   const titles = blogsAtEnd.map((blog) => blog.title);
   expect(titles).toContain('Example Blog');
+});
+
+test('if "likes" property is missing from request, server sets likes to zero', async () => {
+  const newBlog = {
+    title: 'Example Blog',
+    author: 'Mary Sue',
+    url: 'example.com',
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAtEnd = await notesInDb();
+  const { likes } = blogsAtEnd[blogsAtEnd.length - 1];
+
+  expect(likes).toBe(0);
 });
 
 afterAll(() => {

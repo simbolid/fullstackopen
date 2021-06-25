@@ -7,16 +7,20 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs);
 });
 
-// add blog
+// validate blog and save to database
 blogRouter.post('/', async (request, response) => {
+  if (!request.body.title || !request.body.url) {
+    return response.status(400).end();
+  }
+
   if (!request.body.likes) {
     request.body.likes = 0;
   }
 
   const blog = new Blog(request.body);
-
   const savedBlog = await blog.save();
 
+  // 201 created
   response.status(201).json(savedBlog);
 });
 

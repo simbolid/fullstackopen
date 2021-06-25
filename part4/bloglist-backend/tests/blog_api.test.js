@@ -77,6 +77,34 @@ test('if "likes" property is missing from request, server sets likes to zero', a
   expect(likes).toBe(0);
 });
 
+test('if title or url properties are missing, server returns 400 bad request', async () => {
+  const missingTitle = {
+    author: 'Mary Sue',
+    url: 'example.com',
+    likes: 10,
+  };
+
+  const missingUrl = {
+    title: 'Example Blog',
+    author: 'Mary Sue',
+    likes: 10,
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(missingTitle)
+    .expect(400);
+
+  await api
+    .post('/api/blogs')
+    .send(missingUrl)
+    .expect(400);
+
+  // make sure no notes have been added to database
+  const blogsAtEnd = await notesInDb();
+  expect(blogsAtEnd).toHaveLength(initialBlogs.length);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

@@ -10,6 +10,17 @@ userRouter.get('/', async (request, response) => {
 userRouter.post('/', async (request, response) => {
   const { body } = request;
 
+  if (!body.password) {
+    return response.status(401).json({
+      error: 'missing password',
+    });
+  }
+  if (body.password.length < 3) {
+    return response.status(401).json({
+      error: 'password must be at least three characters long',
+    });
+  }
+
   // controls how much time needed to calculate a hash; recommended value is 10
   const saltRounds = 10;
 

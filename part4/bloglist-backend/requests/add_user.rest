@@ -3,15 +3,15 @@ Content-Type: application/json
 
 {
   "username": "first",
-  "name": "luffy",
-  "password": "king"
+  "name": "luffy"
 }
 ###
+# username too short
 POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "second",
+  "username": "sec",
   "name": "zolo",
-  "password": "sword"
+  "password": "sw"
 }

@@ -11,12 +11,12 @@ userRouter.post('/', async (request, response) => {
   const { body } = request;
 
   if (!body.password) {
-    return response.status(401).json({
+    return response.status(400).json({
       error: 'missing password',
     });
   }
   if (body.password.length < 3) {
-    return response.status(401).json({
+    return response.status(400).json({
       error: 'password must be at least three characters long',
     });
   }
@@ -34,7 +34,7 @@ userRouter.post('/', async (request, response) => {
   });
 
   const savedUser = await user.save();
-  response.json(savedUser);
+  response.status(201).json(savedUser);
 });
 
 module.exports = userRouter;

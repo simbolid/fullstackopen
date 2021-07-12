@@ -2,16 +2,16 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "first",
-  "name": "luffy"
+  "username": "Captain",
+  "name": "Monkey D. Luffy",
+  "password": "cap'n"
 }
 ###
-# username too short
 POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "sec",
-  "name": "zolo",
-  "password": "sw"
+  "username": "First Mate",
+  "name": "Roronoa Zoro",
+  "password": "sweet"
 }

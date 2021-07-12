@@ -4,7 +4,11 @@ const User = require('../models/user');
 
 // get all blogs
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user');
+  const blogs = await Blog.find({})
+    .populate('user', {
+      username: 1,
+      name: 1,
+    });
   response.json(blogs);
 });
 
@@ -19,6 +23,9 @@ blogRouter.post('/', async (request, response) => {
   }
 
   const users = await User.find({});
+  const user = users[0];
+
+  console.log(user);
 
   const blog = new Blog({
     title: request.body.title,
@@ -27,9 +34,14 @@ blogRouter.post('/', async (request, response) => {
     likes: request.body.likes,
 
     // simply assign the first user for this exercise
-    user: users[0].id,
+    user: user.id,
   });
+
   const savedBlog = await blog.save();
+
+  // update user entry as well
+  user.blogs = user.blogs.concat(savedBlog);
+  await user.save();
 
   // 201 created
   response.status(201).json(savedBlog);

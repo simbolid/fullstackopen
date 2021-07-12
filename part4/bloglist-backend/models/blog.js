@@ -11,6 +11,12 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
   likes: Number,
+
+  // ref field indicates the collection in which to search for the ID
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 // converting the ID field to a string makes testing easier

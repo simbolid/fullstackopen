@@ -35,7 +35,9 @@ app.use(middleware.tokenExtractor);
 // route handling
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
-app.use('/api/blogs', blogRouter);
+
+// requests to this endpoint will have a request.user property
+app.use('/api/blogs', middleware.userExtractor, blogRouter);
 
 // error handling
 app.use(middleware.errorHandler);

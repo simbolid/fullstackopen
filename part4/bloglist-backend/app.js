@@ -29,6 +29,9 @@ app.use(cors());
 // parse requests with JSON payloads
 app.use(express.json());
 
+// extract auth tokens into request.token
+app.use(middleware.tokenExtractor);
+
 // route handling
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);

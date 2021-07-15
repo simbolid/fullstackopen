@@ -3,17 +3,6 @@ const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
-// retrive the token from a request's authorization header
-const getTokenFromReq = (request) => {
-  // authorization header format: "Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW"
-  const auth = request.get('authorization');
-
-  if (auth && auth.toLowerCase().startsWith('bearer ')) {
-    return auth.substring(7);
-  }
-  return null;
-};
-
 // get all blogs
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
@@ -26,11 +15,10 @@ blogRouter.get('/', async (request, response) => {
 
 // validate blog and save to database
 blogRouter.post('/', async (request, response) => {
-  const token = getTokenFromReq(request);
-  const decodedToken = jwt.verify(token, process.env.SECRET);
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
   // only allow logged-in users to add blogs
-  if (!token || !decodedToken.id) {
+  if (!request.token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
 

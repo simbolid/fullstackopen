@@ -1,5 +1,18 @@
 const logger = require('./logger');
 
+const tokenExtractor = (request, response, next) => {
+  // authorization header format: "Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW"
+  const auth = request.get('authorization');
+
+  if (auth && auth.toLowerCase().startsWith('bearer ')) {
+    request.token = auth.substring(7);
+  } else {
+    request.token = null;
+  }
+
+  next();
+};
+
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
 
@@ -17,5 +30,6 @@ const errorHandler = (error, request, response, next) => {
 };
 
 module.exports = {
+  tokenExtractor,
   errorHandler,
 };

@@ -14,8 +14,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZpcnN0IE1hdGUiLCJpZCI6IjYwZWM3Zjc1Y2YwNWMwMzM1MDMxYWJjMiIsImlhdCI6MTYyNjIxMDAwM30.VHH-Bg72JD4WiyzknQO1ZSW7TjozPQIWpEjmdfvqnTs
 
 {
-  "title": "Token Blog",
-  "author": "Michael Chan",
+  "title": "Token Extraction using Middleware",
+  "author": "MC",
   "url": "https://example.com",
   "likes": 70
 }

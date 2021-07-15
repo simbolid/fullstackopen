@@ -52,8 +52,23 @@ blogRouter.post('/', async (request, response) => {
 
 // delete a blog
 blogRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
-  response.status(204).end();
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' });
+  }
+
+  const blog = await Blog.findById(request.params.id);
+
+  if (!blog) return response.status(404).json({ error: 'invalid ID' });
+
+  if (blog.user.toString() === decodedToken.id) {
+    await Blog.deleteOne(blog);
+    return response.status(204).end();
+  }
+
+  // 403 forbidden
+  return response.status(403).json({ error: 'cannot delete notes that belong to other users' });
 });
 
 // update a blog's like count

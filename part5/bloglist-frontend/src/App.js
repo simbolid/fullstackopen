@@ -10,6 +10,16 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // automatically login if user data is in local storage
+  useEffect(() => {
+    const userJSON = window.localStorage.getItem("blogAppUser");
+    if (userJSON) {
+      const user = JSON.parse(userJSON);
+      blogService.setToken(user.token);
+      setUser(user);
+    }
+  }, []);
+
   useEffect(() => {
     if (user !== null) {
       blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -25,9 +35,7 @@ const App = () => {
         password,
       });
 
-      console.log(user);
-
-      // window.localStorage.setItem("blogAppUser", JSON.stringify(user));
+      window.localStorage.setItem("blogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
       setUsername("");
@@ -35,7 +43,12 @@ const App = () => {
     } catch (exception) {
       console.log("Wrong credentials");
     }
-  }
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("blogAppUser");
+    setUser(null);
+  };
 
   if (user === null) {
     return (
@@ -55,7 +68,12 @@ const App = () => {
   return (
     <>
       <h2>blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>
+        {user.name} logged in
+        <button type="button" onClick={handleLogout}>
+          logout
+        </button>
+      </p>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}

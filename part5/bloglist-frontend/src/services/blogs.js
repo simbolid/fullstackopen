@@ -12,7 +12,7 @@ const getAll = async () => {
     headers: { Authorization: token },
   };
 
-  const response =  await axios.get(baseUrl, config);
+  const response = await axios.get(baseUrl, config);
   return response.data;
 };
 
@@ -22,7 +22,7 @@ const create = async (newBlog) => {
   };
 
   const response = await axios.post(baseUrl, newBlog, config);
-  return response.data; 
+  return response.data;
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

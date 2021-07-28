@@ -11,9 +11,9 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
   const [notification, setNotification] = useState(null);
 
   // automatically login if user data is in local storage
@@ -43,9 +43,9 @@ const App = () => {
 
       window.localStorage.setItem("blogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
-      
+
       // in case the user logs in before the notification has expired
-      setNotification(null);     
+      setNotification(null);
 
       setUser(user);
     } catch (exception) {
@@ -78,13 +78,13 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(newBlog);
       setBlogs(blogs.concat(returnedBlog));
-      setNotification(`${title} by ${author} added`)
+      setNotification(`${title} by ${author} added`);
     } catch (exception) {
       setNotification(exception.message);
     } finally {
-      setTitle('');
-      setAuthor('');
-      setUrl('');
+      setTitle("");
+      setAuthor("");
+      setUrl("");
       setTimeout(() => {
         setTimeout(() => setNotification(null), 5000);
       });
@@ -97,14 +97,14 @@ const App = () => {
         <h2>Login</h2>
         <LoginForm
           username={username}
-          onUsernameChange={({target}) => setUsername(target.value)}
-          password={password} 
-          onPasswordChange={({target}) => setPassword(target.value)}
-          handleLogin={handleLogin} 
+          onUsernameChange={({ target }) => setUsername(target.value)}
+          password={password}
+          onPasswordChange={({ target }) => setPassword(target.value)}
+          handleLogin={handleLogin}
         />
         <Notification message={notification} />
       </>
-    )
+    );
   }
 
   return (
@@ -120,14 +120,14 @@ const App = () => {
         <Blog key={blog.id} blog={blog} />
       ))}
       <h3>Create New</h3>
-      <BlogForm 
+      <BlogForm
         addBlog={addBlog}
         title={title}
-        onTitleChange={({target}) => setTitle(target.value)}
+        onTitleChange={({ target }) => setTitle(target.value)}
         author={author}
-        onAuthorChange={({target}) => setAuthor(target.value)}
+        onAuthorChange={({ target }) => setAuthor(target.value)}
         url={url}
-        onURLChange={({target}) => setUrl(target.value)}
+        onURLChange={({ target }) => setUrl(target.value)}
       />
       <Notification message={notification} />
     </>

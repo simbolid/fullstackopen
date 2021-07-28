@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -13,6 +14,7 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+  const [notification, setNotification] = useState(null);
 
   // automatically login if user data is in local storage
   useEffect(() => {
@@ -41,17 +43,27 @@ const App = () => {
 
       window.localStorage.setItem("blogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
+      
+      // in case the user logs in before the notification has expired
+      setNotification(null);     
+
       setUser(user);
+    } catch (exception) {
+      setNotification("Invalid credentials");
+      setTimeout(() => setNotification(null), 5000);
+    } finally {
       setUsername("");
       setPassword("");
-    } catch (exception) {
-      console.log("Wrong credentials");
     }
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem("blogAppUser");
     setUser(null);
+    setTitle("");
+    setAuthor("");
+    setUrl("");
+    setNotification(null);
   };
 
   const addBlog = async (event) => {
@@ -63,12 +75,20 @@ const App = () => {
       url: url,
     };
 
-    const returnedBlog = await blogService.create(newBlog);
-
-    setBlogs(blogs.concat(returnedBlog));
-    setTitle('');
-    setAuthor('');
-    setUrl('');
+    try {
+      const returnedBlog = await blogService.create(newBlog);
+      setBlogs(blogs.concat(returnedBlog));
+      setNotification(`${title} by ${author} added`)
+    } catch (exception) {
+      setNotification(exception.message);
+    } finally {
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+      setTimeout(() => {
+        setTimeout(() => setNotification(null), 5000);
+      });
+    }
   };
 
   if (user === null) {
@@ -82,6 +102,7 @@ const App = () => {
           onPasswordChange={({target}) => setPassword(target.value)}
           handleLogin={handleLogin} 
         />
+        <Notification message={notification} />
       </>
     )
   }
@@ -108,6 +129,7 @@ const App = () => {
         url={url}
         onURLChange={({target}) => setUrl(target.value)}
       />
+      <Notification message={notification} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
@@ -12,10 +12,10 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [notification, setNotification] = useState(null);
+
+  const blogFormRef = useRef();
+  const blogFormToggleRef = useRef();
 
   // automatically login if user data is in local storage
   useEffect(() => {
@@ -61,31 +61,22 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem("blogAppUser");
     setUser(null);
-    setTitle("");
-    setAuthor("");
-    setUrl("");
+    blogFormRef.current.clearForm();
     setNotification(null);
   };
 
-  const addBlog = async (event) => {
-    event.preventDefault();
-
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url,
-    };
-
+  const createBlog = async (blogObject) => {
     try {
-      const returnedBlog = await blogService.create(newBlog);
+      const title = blogFormRef.current.title;
+      const author = blogFormRef.current.author;
+
+      blogFormToggleRef.current.toggleVisibility();
+      const returnedBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(returnedBlog));
       setNotification(`${title} by ${author} added`);
     } catch (exception) {
       setNotification(exception.message);
     } finally {
-      setTitle("");
-      setAuthor("");
-      setUrl("");
       setTimeout(() => {
         setTimeout(() => setNotification(null), 5000);
       });
@@ -118,17 +109,8 @@ const App = () => {
         </button>
       </p>
       <Notification message={notification} />
-      <Togglable buttonLabel="Create new blog">
-        <h3>Create New Blog</h3>
-        <BlogForm
-          addBlog={addBlog}
-          title={title}
-          onTitleChange={({ target }) => setTitle(target.value)}
-          author={author}
-          onAuthorChange={({ target }) => setAuthor(target.value)}
-          url={url}
-          onURLChange={({ target }) => setUrl(target.value)}
-        />
+      <Togglable buttonLabel="Create new blog" ref={blogFormToggleRef}>
+        <BlogForm createBlog={createBlog} ref={blogFormRef} />
       </Togglable>
       <br></br>
       {blogs.map((blog) => (

@@ -1,6 +1,11 @@
-PUT http://localhost:3003/api/blogs/60d648b5217f592e0cba7da7
+PUT http://localhost:3003/api/blogs/60ec7f8fcf05c0335031abc7
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZpcnN0IE1hdGUiLCJpZCI6IjYwZWM3Zjc1Y2YwNWMwMzM1MDMxYWJjMiIsImlhdCI6MTYyNjM2MDU1MH0.V_hoqdzELgrL7cLqpVF913Q_8ZXO72FxxUPZTY6Gkhk
 
 {
-  "likes": 8
+  "title": "Node",
+  "author": "Full Stack",
+  "likes": 120,
+  "url": "fullstackopen.com",
+  "user": "60ec7f6ecf05c0335031abbe"
 }

@@ -56,12 +56,9 @@ blogRouter.delete('/:id', async (request, response) => {
   return response.status(403).json({ error: 'cannot delete notes that belong to other users' });
 });
 
-// update a blog's like count
 blogRouter.put('/:id', async (request, response) => {
-  const update = { likes: request.body.likes };
-
   // the "new" option makes the operation return the updated note, making testing easier
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, update,
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body,
     { new: true });
 
   response.json(updatedBlog);

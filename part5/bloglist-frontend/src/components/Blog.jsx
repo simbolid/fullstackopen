@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Blog = ({ blog }) => { 
+const Blog = ({ blog, updateBlog }) => {
   const [open, setOpen] = useState(false);
 
   const blogStyle = {
@@ -8,21 +8,31 @@ const Blog = ({ blog }) => {
     paddingBlock: 10,
     paddingInline: 5,
     marginBottom: 5,
-    border: 'solid',
-    borderColor: 'gray',
+    border: "solid",
+    borderColor: "gray",
     borderWidth: open ? 1 : 0,
     borderRadius: 5,
   };
 
   const showWhenOpen = { display: open ? "" : "none" };
-  const buttonSpacing = { 
-    marginLeft: 4, 
+
+  const buttonSpacing = {
+    marginLeft: 4,
     width: 40,
   };
-  
 
   const toggleOpen = () => {
     setOpen(!open);
+  };
+
+  const updateLikeCount = () => {
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+    };
+
+    updateBlog(updatedBlog);
   };
 
   return (
@@ -30,18 +40,15 @@ const Blog = ({ blog }) => {
       <div style={blogStyle}>
         <span>
           <em>{`${blog.title} `}</em> {`by ${blog.author}`}
-          <button 
-            style={buttonSpacing}
-            onClick={toggleOpen}
-          >
-            { open ? "Close" : "View" }
+          <button style={buttonSpacing} onClick={toggleOpen}>
+            {open ? "Close" : "View"}
           </button>
         </span>
         <div style={showWhenOpen}>
           {blog.url}
           <br></br>
           Likes: {blog.likes}
-          <button style={buttonSpacing}>
+          <button style={buttonSpacing} onClick={updateLikeCount}>
             Like
           </button>
         </div>

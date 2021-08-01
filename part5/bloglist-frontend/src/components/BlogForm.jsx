@@ -9,21 +9,21 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
     setTitle("");
     setAuthor("");
     setUrl("");
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     createBlog({
       title: title,
       author: author,
-      url: url
+      url: url,
     });
 
     clearForm();
   };
 
   useImperativeHandle(ref, () => ({
-    title, 
+    title,
     author,
     url,
     clearForm,
@@ -35,13 +35,25 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
       <form onSubmit={handleSubmit}>
         <p>
           Title:
-          <input type="text" value={title} onChange={({ target }) => setTitle(target.value)} />
+          <input
+            type="text"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
           <br></br>
           Author:
-          <input type="text" value={author} onChange={({ target }) => setAuthor(target.value)} />
+          <input
+            type="text"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
           <br></br>
           URL:
-          <input type="text" value={url} onChange={({ target }) => setUrl(target.value)} />
+          <input
+            type="text"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
         </p>
         <button type="submit">Submit</button>
       </form>

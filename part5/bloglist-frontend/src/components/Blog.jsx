@@ -37,13 +37,9 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
 
   const deleteButton = () => {
     if (userId === blog.user.id) {
-      return (
-        <button onClick={() => deleteBlog(blog)}>
-          Delete
-        </button>
-      );
+      return <button onClick={() => deleteBlog(blog)}>Delete</button>;
     }
-  }
+  };
 
   return (
     <>

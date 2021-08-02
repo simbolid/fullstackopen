@@ -86,10 +86,8 @@ const App = () => {
   const deleteBlog = async (blogObject) => {
     try {
       await blogService.delete_(blogObject);
-      setBlogs(
-        blogs.filter((blog) => (blog.id !== blogObject.id))
-      );
-      setNotification('Blog deleted');
+      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
+      setNotification("Blog deleted");
     } catch (exception) {
       setNotification(exception.message);
     } finally {
@@ -131,11 +129,7 @@ const App = () => {
       <h2>Blogs</h2>
       <p>
         {user.name} logged in
-        <button 
-          type="button" 
-          onClick={handleLogout}
-          style={{ marginLeft: 4 }}
-        >
+        <button type="button" onClick={handleLogout} style={{ marginLeft: 4 }}>
           Logout
         </button>
       </p>
@@ -147,14 +141,14 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-        <Blog 
-          key={blog.id} 
-          blog={blog} 
-          deleteBlog={deleteBlog}
-          updateBlog={updateBlog} 
-          userId={user.id}
-        />
-      ))}
+          <Blog
+            key={blog.id}
+            blog={blog}
+            deleteBlog={deleteBlog}
+            updateBlog={updateBlog}
+            userId={user.id}
+          />
+        ))}
     </>
   );
 };

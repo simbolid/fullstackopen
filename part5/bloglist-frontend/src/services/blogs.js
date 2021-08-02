@@ -35,10 +35,10 @@ const update = async (updatedBlog) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { 
-  getAll, 
-  setToken, 
-  create, 
+export default {
+  getAll,
+  setToken,
+  create,
   delete_,
-  update 
+  update,
 };

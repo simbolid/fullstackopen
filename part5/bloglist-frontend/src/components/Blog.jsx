@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
   const [open, setOpen] = useState(false);
 
   const blogStyle = {
@@ -35,6 +35,16 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog(updatedBlog);
   };
 
+  const deleteButton = () => {
+    if (userId === blog.user.id) {
+      return (
+        <button onClick={() => deleteBlog(blog)}>
+          Delete
+        </button>
+      );
+    }
+  }
+
   return (
     <>
       <div style={blogStyle}>
@@ -51,6 +61,8 @@ const Blog = ({ blog, updateBlog }) => {
           <button style={buttonSpacing} onClick={updateLikeCount}>
             Like
           </button>
+          <br></br>
+          {deleteButton()}
         </div>
       </div>
       <br></br>

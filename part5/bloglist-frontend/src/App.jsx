@@ -83,6 +83,22 @@ const App = () => {
     }
   };
 
+  const deleteBlog = async (blogObject) => {
+    try {
+      await blogService.delete_(blogObject);
+      setBlogs(
+        blogs.filter((blog) => (blog.id !== blogObject.id))
+      );
+      setNotification('Blog deleted');
+    } catch (exception) {
+      setNotification(exception.message);
+    } finally {
+      setTimeout(() => {
+        setTimeout(() => setNotification(null), 5000);
+      });
+    }
+  };
+
   const updateBlog = async (blogObject) => {
     try {
       const returnedBlog = await blogService.update(blogObject);
@@ -131,7 +147,13 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog 
+          key={blog.id} 
+          blog={blog} 
+          deleteBlog={deleteBlog}
+          updateBlog={updateBlog} 
+          userId={user.id}
+        />
       ))}
     </>
   );

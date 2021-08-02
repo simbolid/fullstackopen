@@ -115,8 +115,12 @@ const App = () => {
       <h2>Blogs</h2>
       <p>
         {user.name} logged in
-        <button type="button" onClick={handleLogout}>
-          logout
+        <button 
+          type="button" 
+          onClick={handleLogout}
+          style={{ marginLeft: 4 }}
+        >
+          Logout
         </button>
       </p>
       <Notification message={notification} />

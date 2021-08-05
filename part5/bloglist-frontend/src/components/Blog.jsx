@@ -44,7 +44,7 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
   return (
     <>
       <div style={blogStyle}>
-        <span>
+        <span className="initialView">
           <em>{`${blog.title} `}</em> {`by ${blog.author}`}
           <button style={buttonSpacing} onClick={toggleOpen}>
             {open ? "Close" : "View"}

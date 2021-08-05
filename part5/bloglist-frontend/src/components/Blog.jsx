@@ -43,14 +43,14 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
 
   return (
     <>
-      <div style={blogStyle}>
-        <span className="initialView">
+      <div style={blogStyle} className="alwaysVisible">
+        <span>
           <em>{`${blog.title} `}</em> {`by ${blog.author}`}
-          <button style={buttonSpacing} onClick={toggleOpen}>
+          <button style={buttonSpacing} onClick={toggleOpen} >
             {open ? "Close" : "View"}
           </button>
         </span>
-        <div style={showWhenOpen}>
+        <div style={showWhenOpen} className="togglable">
           {blog.url}
           <br></br>
           Likes: {blog.likes}

@@ -27,10 +27,13 @@ test("initially renders blog title and author, but not url or likes", () => {
     />
   );
 
-  const unopened = component.container.querySelector('.initialView');
+  const visibleContent = component.container.querySelector(".alwaysVisible");
+  expect(visibleContent).not.toHaveStyle("display: none");
+  expect(visibleContent).toHaveTextContent(blog.title);
+  expect(visibleContent).toHaveTextContent(blog.author);
 
-  expect(unopened).toHaveTextContent(blog.title);
-  expect(unopened).toHaveTextContent(blog.author);
-  expect(unopened).not.toHaveTextContent(blog.url);
-  expect(unopened).not.toHaveTextContent(blog.likes);
+  const hiddenContent = component.container.querySelector(".togglable");
+  expect(hiddenContent).toHaveStyle("display: none");
+  expect(hiddenContent).toHaveTextContent(blog.url);
+  expect(hiddenContent).toHaveTextContent(blog.likes);
 });

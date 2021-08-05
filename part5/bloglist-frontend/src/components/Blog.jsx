@@ -46,7 +46,7 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
       <div style={blogStyle} className="alwaysVisible">
         <span>
           <em>{`${blog.title} `}</em> {`by ${blog.author}`}
-          <button style={buttonSpacing} onClick={toggleOpen} >
+          <button style={buttonSpacing} onClick={toggleOpen}>
             {open ? "Close" : "View"}
           </button>
         </span>

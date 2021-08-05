@@ -12,26 +12,26 @@ describe("<Blog />", () => {
     user: {
       username: "user",
       name: "jeff",
-      id: "jeff-id"
-    }
+      id: "jeff-id",
+    },
   };
 
-  let component; 
-  let handleUpdate; 
+  let component;
+  let handleUpdate;
   let handleDelete;
 
   beforeEach(() => {
     handleUpdate = jest.fn();
     handleDelete = jest.fn();
     component = render(
-      <Blog 
+      <Blog
         blog={blog}
         updateBlog={handleUpdate}
         deleteBlog={handleDelete}
         userId="some-Id"
       />
     );
-  })
+  });
 
   test("initially displays blog title and author, but not url or likes", () => {
     const visibleContent = component.container.querySelector(".alwaysVisible");
@@ -59,6 +59,6 @@ describe("<Blog />", () => {
     const likeButton = component.getByText("Like");
     fireEvent.click(likeButton);
     fireEvent.click(likeButton);
-    expect(handleUpdate.mock.calls).toHaveLength(2); 
+    expect(handleUpdate.mock.calls).toHaveLength(2);
   });
 });

@@ -1,11 +1,9 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import Blog from "./Blog";
 
-test("initially renders blog title and author, but not url or likes", () => {
-  const mockHandler = jest.fn();
-
+describe("<Blog />", () => {
   const blog = {
     title: "Lionel Messi Leaving Barca",
     author: "Perez",
@@ -18,22 +16,40 @@ test("initially renders blog title and author, but not url or likes", () => {
     }
   };
 
-  const component = render(
-    <Blog 
-      blog={blog}
-      updateBlog={mockHandler}
-      deleteBlog={mockHandler}
-      userId="some-Id"
-    />
-  );
+  let component; 
+  let mockHandler; 
 
-  const visibleContent = component.container.querySelector(".alwaysVisible");
-  expect(visibleContent).not.toHaveStyle("display: none");
-  expect(visibleContent).toHaveTextContent(blog.title);
-  expect(visibleContent).toHaveTextContent(blog.author);
+  beforeEach(() => {
+    mockHandler = jest.fn();
+    component = render(
+      <Blog 
+        blog={blog}
+        updateBlog={mockHandler}
+        deleteBlog={mockHandler}
+        userId="some-Id"
+      />
+    );
+  })
 
-  const hiddenContent = component.container.querySelector(".togglable");
-  expect(hiddenContent).toHaveStyle("display: none");
-  expect(hiddenContent).toHaveTextContent(blog.url);
-  expect(hiddenContent).toHaveTextContent(blog.likes);
+  test("initially displays blog title and author, but not url or likes", () => {
+    const visibleContent = component.container.querySelector(".alwaysVisible");
+    expect(visibleContent).toBeVisible();
+    expect(visibleContent).toHaveTextContent(blog.title);
+    expect(visibleContent).toHaveTextContent(blog.author);
+
+    const hiddenContent = component.container.querySelector(".togglable");
+    expect(hiddenContent).not.toBeVisible();
+    expect(hiddenContent).toHaveTextContent(blog.url);
+    expect(hiddenContent).toHaveTextContent(blog.likes);
+  });
+
+  test("displays the url and number of likes when the togglable button is clicked", () => {
+    const viewButton = component.getByText("View");
+    fireEvent.click(viewButton);
+
+    const hiddenContent = component.container.querySelector(".togglable");
+    expect(hiddenContent).toBeVisible();
+    expect(hiddenContent).toHaveTextContent(blog.url);
+    expect(hiddenContent).toHaveTextContent(blog.likes);
+  });
 });

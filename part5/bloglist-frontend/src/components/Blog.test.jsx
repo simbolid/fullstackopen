@@ -17,15 +17,17 @@ describe("<Blog />", () => {
   };
 
   let component; 
-  let mockHandler; 
+  let handleUpdate; 
+  let handleDelete;
 
   beforeEach(() => {
-    mockHandler = jest.fn();
+    handleUpdate = jest.fn();
+    handleDelete = jest.fn();
     component = render(
       <Blog 
         blog={blog}
-        updateBlog={mockHandler}
-        deleteBlog={mockHandler}
+        updateBlog={handleUpdate}
+        deleteBlog={handleDelete}
         userId="some-Id"
       />
     );
@@ -51,5 +53,12 @@ describe("<Blog />", () => {
     expect(hiddenContent).toBeVisible();
     expect(hiddenContent).toHaveTextContent(blog.url);
     expect(hiddenContent).toHaveTextContent(blog.likes);
+  });
+
+  test("calls the updateBlog handler each time the like button is clicked", () => {
+    const likeButton = component.getByText("Like");
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
+    expect(handleUpdate.mock.calls).toHaveLength(2); 
   });
 });

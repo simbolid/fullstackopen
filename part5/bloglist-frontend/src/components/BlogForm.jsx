@@ -36,6 +36,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
         <p>
           Title:
           <input
+            id="title"
             type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
@@ -43,6 +44,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
           <br></br>
           Author:
           <input
+            id="author"
             type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
@@ -50,6 +52,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
           <br></br>
           URL:
           <input
+            id="url"
             type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)}

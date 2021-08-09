@@ -5,6 +5,7 @@ const LoginForm = (props) => (
     <p>
       Username
       <input
+        id="usernameInput"
         type="text"
         value={props.username}
         name="Username"
@@ -13,6 +14,7 @@ const LoginForm = (props) => (
       <br></br>
       Password
       <input
+        id="passwordInput"
         type="password"
         value={props.password}
         name="Password"

@@ -1,7 +1,7 @@
 import React from "react";
 
 const LoginForm = (props) => (
-  <form onSubmit={props.handleLogin}>
+  <form onSubmit={props.handleLogin} id="loginForm">
     <p>
       Username
       <input

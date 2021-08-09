@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const blogRouter = require('./controllers/blogs');
 const loginRouter = require('./controllers/login');
 const userRouter = require('./controllers/users');
+const testingRouter = require('./controllers/testing');
 const config = require('./utils/config');
 const logger = require('./utils/logger');
 const middleware = require('./utils/middleware');
@@ -29,17 +30,16 @@ app.use(cors());
 // parse requests with JSON payloads
 app.use(express.json());
 
-// extract auth tokens into request.token
-app.use(middleware.tokenExtractor);
-
 // route handling
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter);
+}
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
 
-// requests to this endpoint will have a request.user property
-app.use('/api/blogs', middleware.userExtractor, blogRouter);
+// requests to this endpoint will have token and user properties
+app.use('/api/blogs', middleware.tokenExtractor, middleware.userExtractor, blogRouter);
 
-// error handling
 app.use(middleware.errorHandler);
 
 module.exports = app;

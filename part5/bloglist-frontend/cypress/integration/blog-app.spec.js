@@ -1,5 +1,5 @@
-describe('Blog app', function () {
-  beforeEach(function() {
+describe("Blog app", function () {
+  beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
 
     const user = {
@@ -13,7 +13,7 @@ describe('Blog app', function () {
     cy.visit("http://localhost:3000");
   });
 
-  it("Login form is shown", function() {
+  it("Login form is shown", function () {
     cy.get("#loginForm").as("login");
     cy.get("@login").find("input").should("have.length", 2);
   });
@@ -38,7 +38,7 @@ describe('Blog app', function () {
   });
 
   describe.only("When logged in", function () {
-    beforeEach(function() {
+    beforeEach(function () {
       cy.login({ username: "username", password: "password" });
     });
 

@@ -86,9 +86,12 @@ describe("Blog app", function () {
       });
 
       it("a user can delete a blog they created", function () {
-        cy.contains("Three by Ms. Wednesday").as("header").contains("View").click();
+        cy.contains("Three by Ms. Wednesday")
+          .as("header")
+          .contains("View")
+          .click();
         cy.get("@header").siblings(".togglable").find(".deleteButton").click();
-        
+
         cy.get("html").should("not.contain", "Three by Ms. Wednesday");
       });
 
@@ -97,12 +100,12 @@ describe("Blog app", function () {
           name: "User 2",
           username: "username2",
           password: "password2",
-        })
+        });
         cy.logout();
         cy.login({ username: "username2", password: "password2" });
 
         cy.get(".deleteButton").should("not.exist");
-      }); 
+      });
     });
   });
 });

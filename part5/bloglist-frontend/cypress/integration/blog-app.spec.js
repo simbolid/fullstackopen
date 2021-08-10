@@ -95,7 +95,7 @@ describe("Blog app", function () {
         cy.get("html").should("not.contain", "Three by Ms. Wednesday");
       });
 
-      it.only("a user cannot delete blogs they do not own", function () {
+      it("a user cannot delete blogs they do not own", function () {
         cy.createUser({
           name: "User 2",
           username: "username2",
@@ -105,6 +105,39 @@ describe("Blog app", function () {
         cy.login({ username: "username2", password: "password2" });
 
         cy.get(".deleteButton").should("not.exist");
+      });
+
+      it("blogs are ordered so that blogs with more likes appear first", function () {
+        cy.createBlog({
+          title: "Four",
+          author: "Ms. Thursday",
+          url: "thursday.com",
+          likes: 4,
+        });
+        cy.createBlog({
+          title: "Five",
+          author: "Ms. Friday",
+          url: "friday.com",
+          likes: 5,
+        });
+        cy.createBlog({
+          title: "Seven",
+          author: "Ms. All Sunday",
+          url: "sunday.com",
+          likes: 3,
+        });
+
+        cy.get(".blog").then(($blogs) => {
+          const likeOrder = $blogs.map(function (idx, el) {
+            return parseInt(el.textContent.match(/\d/), 10);
+          });
+
+          const isDescending = Array.from(likeOrder).every(
+            (el, idx) => idx === 0 || el <= likeOrder[idx - 1]
+          );
+
+          expect(isDescending).to.be.true;
+        });
       });
     });
   });

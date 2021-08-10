@@ -46,7 +46,7 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
   };
 
   return (
-    <>
+    <div className="blog">
       <div style={blogStyle} className="alwaysVisible">
         <span>
           <em>{`${blog.title} `}</em> {`by ${blog.author}`}
@@ -70,7 +70,7 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
         </div>
       </div>
       <br></br>
-    </>
+    </div>
   );
 };
 

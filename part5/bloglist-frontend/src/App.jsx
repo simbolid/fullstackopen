@@ -17,7 +17,9 @@ const App = () => {
   const blogFormRef = useRef();
   const blogFormToggleRef = useRef();
 
-  // automatically login if user data is in local storage
+  /* Automatically log in if user data is in local storage.
+   * NOTE: never use this method to store JWT or other sensitive information
+   * in a production build. See https://www.rdegges.com/2018/please-stop-using-local-storage */
   useEffect(() => {
     const userJSON = window.localStorage.getItem("blogAppUser");
     if (userJSON) {

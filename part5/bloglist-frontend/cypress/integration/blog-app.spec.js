@@ -36,4 +36,28 @@ describe('Blog app', function () {
       cy.contains("Invalid credentials");
     });
   });
+
+  describe.only("When logged in", function () {
+    beforeEach(function() {
+      cy.login({ username: "username", password: "password" });
+    });
+
+    it("a user can create a blog", function () {
+      cy.contains("Create new blog").click();
+
+      cy.get("#title").type("Test Title");
+      cy.get("#author").type("Mary Sue");
+      cy.get("#url").type("example.com");
+      cy.clock();
+      cy.get("#blogForm").find("button").click();
+
+      // test notification
+      cy.contains("Test Title by Mary Sue added");
+      cy.tick(6000);
+      cy.get("html").should("not.contain", "Test Title by Mary Sue added");
+
+      // app should display blog title and author
+      cy.contains("Test Title by Mary Sue");
+    });
+  });
 });

@@ -32,7 +32,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
   return (
     <>
       <h3>Create new blog</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="blogForm">
         <p>
           Title:
           <input

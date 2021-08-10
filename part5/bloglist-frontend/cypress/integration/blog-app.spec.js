@@ -37,7 +37,7 @@ describe("Blog app", function () {
     });
   });
 
-  describe.only("When logged in", function () {
+  describe("When logged in", function () {
     beforeEach(function () {
       cy.login({ username: "username", password: "password" });
     });
@@ -58,6 +58,36 @@ describe("Blog app", function () {
 
       // app should display blog title and author
       cy.contains("Test Title by Mary Sue");
+    });
+
+    describe.only("and blogs exist", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "One",
+          author: "Ms. Monday",
+          url: "monday.com",
+        });
+        cy.createBlog({
+          title: "Two",
+          author: "Ms. Tuesday",
+          url: "tuesday.com",
+        });
+        cy.createBlog({
+          title: "Three",
+          author: "Ms. Wednesday",
+          url: "wednesday.com",
+        });
+      });
+
+      it("a user can like a blog", function () {
+        cy.contains("Two by Ms. Tuesday").as("header").contains("View").click();
+
+        cy.contains("Likes: 0");
+
+        cy.get("@header").siblings(".togglable").find(".likeButton").click();
+
+        cy.contains("Likes: 1");
+      });
     });
   });
 });

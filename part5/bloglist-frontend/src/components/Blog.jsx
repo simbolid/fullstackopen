@@ -54,7 +54,11 @@ const Blog = ({ blog, deleteBlog, updateBlog, userId }) => {
           {blog.url}
           <br></br>
           Likes: {blog.likes}
-          <button style={buttonSpacing} onClick={updateLikeCount}>
+          <button
+            style={buttonSpacing}
+            onClick={updateLikeCount}
+            className="likeButton"
+          >
             Like
           </button>
           <br></br>

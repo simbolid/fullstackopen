@@ -2,13 +2,11 @@ describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
 
-    const user = {
+    cy.createUser({
       name: "User",
       username: "username",
       password: "password",
-    };
-
-    cy.request("POST", "http://localhost:3003/api/users", user);
+    });
 
     cy.visit("http://localhost:3000");
   });
@@ -60,7 +58,7 @@ describe("Blog app", function () {
       cy.contains("Test Title by Mary Sue");
     });
 
-    describe.only("and blogs exist", function () {
+    describe("and blogs exist", function () {
       beforeEach(function () {
         cy.createBlog({
           title: "One",
@@ -81,13 +79,30 @@ describe("Blog app", function () {
 
       it("a user can like a blog", function () {
         cy.contains("Two by Ms. Tuesday").as("header").contains("View").click();
-
         cy.contains("Likes: 0");
 
         cy.get("@header").siblings(".togglable").find(".likeButton").click();
-
         cy.contains("Likes: 1");
       });
+
+      it("a user can delete a blog they created", function () {
+        cy.contains("Three by Ms. Wednesday").as("header").contains("View").click();
+        cy.get("@header").siblings(".togglable").find(".deleteButton").click();
+        
+        cy.get("html").should("not.contain", "Three by Ms. Wednesday");
+      });
+
+      it.only("a user cannot delete blogs they do not own", function () {
+        cy.createUser({
+          name: "User 2",
+          username: "username2",
+          password: "password2",
+        })
+        cy.logout();
+        cy.login({ username: "username2", password: "password2" });
+
+        cy.get(".deleteButton").should("not.exist");
+      }); 
     });
   });
 });

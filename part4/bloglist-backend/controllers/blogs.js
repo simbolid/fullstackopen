@@ -58,8 +58,9 @@ blogRouter.delete('/:id', async (request, response) => {
 
 blogRouter.put('/:id', async (request, response) => {
   // the "new" option makes the operation return the updated note, making testing easier
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body,
-    { new: true });
+  const updatedBlog = await Blog
+    .findByIdAndUpdate(request.params.id, request.body, { new: true })
+    .populate('user', { username: 1, name: 1 });
 
   response.json(updatedBlog);
 });
